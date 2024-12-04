@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입하기</title>
+<link rel="stylesheet" href="./write.css">
+
+</head>
+<body>
+	<form method="post" action="/jspStudy/memberInsert" id="div-main"
+		class="myform">
+		<h4>회 원 가 입</h4>
+		<div class="title-table">사이트 이용정보 입력</div>
+		<table>
+			<tr>
+				<td class="col-key">아이디</td>
+				<td><input id="input-id" type="text" name="id" required><span>&nbsp; 아이디는
+						문자, 숫자, 기호 포함 10자 이내</span></td>
+			</tr>
+			<tr>
+				<td class="col-key">비밀번호</td>
+				<td><input id="input-pw1" type="password" name="pw" required><span>&nbsp; 비밀번호는
+						영문자, 숫자, 특수기호 포함 20자 이내</span></td>
+			</tr>
+			<tr>
+		</table>
+
+		<div class="title-table">개인정보 입력</div>
+		<table>
+			<tr>
+				<td class="col-key">이름</td>
+				<td><input id="input-name" type="text" name="name" required><span></span></td>
+			</tr>
+			<tr>
+				<td class="col-key">나이</td>
+				<td><input id="input-name" type="text" name="age" required><span></span></td>
+			</tr>
+		</table>
+
+		<div id="btns-submit">
+			<input id="btn-join" type="submit" value="회원가입"> <input
+				id="btn-cancel" type="reset" name="" value="취소">
+		</div>
+	</form>
+</body>
+</html>
