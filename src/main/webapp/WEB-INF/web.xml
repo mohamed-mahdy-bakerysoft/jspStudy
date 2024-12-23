@@ -26,19 +26,25 @@
     <url-pattern>/visitList</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>memberList</servlet-name>
-    <servlet-class>co.kh.dev.member.MemberList</servlet-class>
+    <servlet-name>hello</servlet-name>
+    <servlet-class>co.kh.dev.Hello</servlet-class>
+    <init-param>
+      <param-name>phone</param-name>
+      <param-value>010-1234-5678</param-value>
+    </init-param>
+    <init-param>
+      <param-name>id</param-name>
+      <param-value>123456</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
-    <servlet-name>memberList</servlet-name>
-    <url-pattern>/memberList</url-pattern>
+    <servlet-name>hello</servlet-name>
+    <url-pattern>/hello.do</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>memberInsert</servlet-name>
-    <servlet-class>co.kh.dev.member.MemberInsert</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>memberInsert</servlet-name>
-    <url-pattern>/memberInsert</url-pattern>
-  </servlet-mapping>
+  <resource-ref>
+    <description>ConnectionPool</description>
+    <res-ref-name>jdbc/myOracle</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
 </web-app>

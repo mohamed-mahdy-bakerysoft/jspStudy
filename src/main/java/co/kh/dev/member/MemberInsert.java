@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "memberInsert", urlPatterns = { "/memberInsert" })
+import co.kh.dev.common.DBUtility;
+
+@WebServlet("/memberInsert.do")
 public class MemberInsert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -32,23 +34,18 @@ public class MemberInsert extends HttpServlet {
 		// 1.1 정보 가져오기
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
-		String name = request.getParameter("name");
-		String age = request.getParameter("age");
 
 		// 2. visit 테이블에 저장한다(포로토콜 : 약속)
 		Connection con = null;
 		PreparedStatement pstmt = null; // 오라클에서 작업할 쿼리문 사용할게 하는 명령문
 		boolean successFlag = false;
-		String url = "jdbc:oracle:thin:@127.0.0.1:1521/xe";
-		String MEMBER_INSERT = "INSERT INTO MEMBER VALUES(?, ?, ?, ?, SYSDATE) ";
+		String MEMBER_INSERT = "INSERT INTO LOGIN VALUES(?, ?) ";
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection(url, "webuser", "123456");
+			con = DBUtility.dbCon();
 			pstmt = con.prepareStatement(MEMBER_INSERT);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
-			pstmt.setString(3, name);
-			pstmt.setString(4, age);
 
 			int count = pstmt.executeUpdate();
 			successFlag = (count != 0) ? (true) : (false);
@@ -80,7 +77,7 @@ public class MemberInsert extends HttpServlet {
 			System.out.println("입력성공");
 			// 웹브라우저가 sendRedirect visitList 요청을 하면 다시한번 url
 			// http://local8080/jspStudy/memberList를 불러주는 것
-			response.sendRedirect("memberList");
+			response.sendRedirect("loginServlet.do");
 		} else {
 			System.out.println("입력실패");
 		}

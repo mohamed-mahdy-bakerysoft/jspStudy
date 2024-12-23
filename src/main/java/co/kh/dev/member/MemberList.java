@@ -13,8 +13,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-//@WebServlet(name = "memberList", urlPatterns = { "/memberList" })
+import co.kh.dev.common.DBUtility;
+
+@WebServlet("/memberList.do")
 public class MemberList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -24,16 +27,20 @@ public class MemberList extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			response.sendRedirect("/jspStudy/loginServlet.do");
+		}
 		// 1. 사용자 데이터 가져오기
 
 		// 2. 테이블 curd
 		Connection con = null;
-		String MEMBER_INSERT = "select * from member order by id desc";
+		String MEMBER_INSERT = "select * from LOGIN order by id desc";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "webuser", "123456");
+			con = DBUtility.dbCon();
 			pstmt = con.prepareStatement(MEMBER_INSERT);
 			rs = pstmt.executeQuery();
 
@@ -44,30 +51,21 @@ public class MemberList extends HttpServlet {
 			out.println("<html>");
 			out.println("<head><title>회원 리스트</title><link rel=\"stylesheet\" href=\"/jspStudy/member/write.css\"></head>");
 			out.println("<body>");
-			out.println("<h4>회 원 정 보</h4>");
+			out.println("<h4>전체 회원정보</h4>");
 			out.println("<table align=center width=500 border=1>");
 			while (rs.next()) {
 				String id = rs.getString("id");
-				String pw = rs.getString("pw");
-				String name = rs.getString("name");
-				int age = rs.getInt("age");
-				java.sql.Date regdate = rs.getDate("regdate");
+				String pass = rs.getString("pass");
 				out.println("<tr width= 200>");
 				out.println("<th class=\"col-key\">아이디</th>");
 				out.println("<td align=center>" + id + "</td>");
 				out.println("<th class=\"col-key\">비밀번호</th>");
-				out.println("<td align=center>" + pw + "</td>");
-				out.println("<th class=\"col-key\">이름</th>");
-				out.println("<td align=center>" + name + "</td>");
-				out.println("<th class=\"col-key\">나이</th>");
-				out.println("<td align=center>" + age + "</td>");
-				out.println("<th class=\"col-key\">날짜</th>");
-				out.println("<td align=center>" + regdate + "</td>");
+				out.println("<td align=center>" + pass + "</td>");
 				out.println("</tr>");
 			}
 			out.println("</table>");
 			out.println("<p>");
-			out.println("<p align=center><a href=/jspStudy/member/write.html>회원가입</a></p>");
+			out.println("<p align=center><a href=/jspStudy/loginServlet.do>로그인 정보</a></p>");
 			out.println("</body>");
 			out.println("</html>");
 		} catch (ClassNotFoundException e) {
@@ -75,27 +73,7 @@ public class MemberList extends HttpServlet {
 		} catch (SQLException e) {
 			System.out.println(e.toString());
 		} finally {
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					System.out.println(e.toString());
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					System.out.println(e.toString());
-				}
-			}
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					System.out.println(e.toString());
-				}
-			}
+			DBUtility.dbClose(con, pstmt, rs);
 		}
 	}
 }
